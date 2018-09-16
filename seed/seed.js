@@ -5,6 +5,7 @@ const { formatArticleData, formatCommentData } = require('./utils.js');
 const seedDB = ({ userData, topicData, articleData, commentData }) => {
   return mongoose.connection.dropDatabase()
     .then(() => {
+      console.log('database dropped')
       return Promise.all([
         User.insertMany(userData),
         Topic.insertMany(topicData)

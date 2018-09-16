@@ -5,6 +5,7 @@ const data = require('./devData');
 
 mongoose.connect(DB_URL)
   .then(() => {
+    console.log('connected')
     return seedDB(data)
   })
   .then(() => {
