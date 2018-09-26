@@ -1,18 +1,22 @@
 const { User } = require('../models');
 
+// GET all users
 const getUsers = (req, res, next) => {
   User.find()
-    // .populate('-__v')
     .then(users => {
       res.send({ users })
     })
 }
 
+// GET users by username
 const getUsername = (req, res, next) => {
-  User.findOne()
-    .then(user => user.username === req.params.username)
-  if (!user) res.status(404).send('User not valid')
-  res.status(200).send('User found!')
+  User.find({ username: req.params.username })
+    .then(user => {
+      if (!user) throw { msg: 'User Not Found', status: 404 }
+      // err message not sending, returns an empty user object instead
+      res.send({ user });
+    })
+    .catch(next)
 }
 
 module.exports = { getUsers, getUsername };

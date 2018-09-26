@@ -37,12 +37,16 @@ describe('/api', function () {
         })
     })
   })
-  describe('/users/:username', () => {
+  describe.only('/users/:username', () => {
     it('GET returns a single user object by username and 200 status code', () => {
-      return request.get('/api/users/:username')
+      return request.get(`/api/users/${users[0].username}`)
         .expect(200)
         .then(res => {
-          expect(res.body.users.username).to.equal(users.username);
+          // console.log(users[0])
+          console.log(res.body)
+          expect(res.body.users.username).to.equal(users[0].username);
+          // console.log(res.body.users.username)
+          console.log(users[0].username)
         })
     })
   })
