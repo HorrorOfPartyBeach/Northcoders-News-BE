@@ -1,4 +1,4 @@
-const { Article, Comment } = require('../models');
+const { User, Article, Comment } = require('../models');
 
 // GET all articles
 const getArticles = (req, res, next) => {
@@ -29,16 +29,35 @@ const getCommentsForArticle = (req, res, next) => {
     .catch(next);
 }
 
-// POST a new comment to an article
+// POST a new comment to an article - NOT WORKING
 const addComment = (req, res, next) => {
-  const { comment } = res.body;
-  Comment.create(comment)
-  Article.findOne({ comment: { $elemMatch: { $eq: user_id } } })
-    .populate('created_by', 'username')
-    .then(comment => {
-      res.send({ comment });
+  let comment = new Comment({
+    body: req.body.comment,
+    belongs_to: req.params.id,
+    created_by: req.params.user_id
+  });
+  comment.save()
+    .then(() => {
+      return Comment.find();
+    })
+    .then(comments => {
+      res.status(201);
+      res.send(comments);
     })
     .catch(next)
 }
+
+// User.findById(req.user.id)
+// console.log(req.article.id)
+// const newComment = {
+//   body: req.body.comment,
+
+// }
+// newComment.then((req.body.comment) => {
+// Article.findOne({ comment: { $elemMatch: { $eq: user_id } } })
+//   .populate('created_by', 'user')
+//   .then(comment => {
+//     res.send({ comment });
+// })
 
 module.exports = { getArticles, getArticleById, getCommentsForArticle, addComment };
