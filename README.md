@@ -1,129 +1,277 @@
-## Northcoders News API
+# **Northcoders News - Backend Project**
 
-### Background
-
-We will be building the API which to use in the Northcoders News Sprint during the Front End block of the course.
-
-Our database will be MongoDB. Your Mongoose models have been created for you so that you can see what the data should look like.
-
-### Mongoose Documentation
-
-The below are some of the model methods that you can call on your models.
-
-* [find](http://mongoosejs.com/docs/api.html#model_Model.find)
-* [findOne](http://mongoosejs.com/docs/api.html#model_Model.findOne)
-* [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
-* [findOneAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findOneAndRemove)
-* [findById](http://mongoosejs.com/docs/api.html#model_Model.findById)
-* [findByIdAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate)
-* [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove)
-* [update](http://mongoosejs.com/docs/api.html#model_Model.update)
-* [create](https://mongoosejs.com/docs/api.html#model_Model.create)
-* [remove](http://mongoosejs.com/docs/api.html#model_Model-remove)
-* [save](http://mongoosejs.com/docs/api.html#model_Model-save)
-* [count](http://mongoosejs.com/docs/api.html#model_Model.count)
-* [populate](https://mongoosejs.com/docs/api.html#model_Model.populate)
-
-### Step 1 - Seeding
-
-Data has been provided for both testing and development environments so you will need to write a seed function to seed your database. You should think about how you will write your seed file to use either test data or dev data depending on the environment that you're running in.
-
-1.  You will need to seed the topics and users, followed by the articles and comments. 
-
-* Each article should have a `belongs_to` property, referenced by a topic's `topic_slug`, and have a `created_by` property that references a user's mongo `_id`. 
-* Each comment should also have `created_by` property that references a user's mongo `_id` and should also have a `belongs_to` property that references the specific article's mongo `_id`.
-
-### Step 2 - Building and Testing
-
-1.  Build your Express App
-2.  Mount an API Router onto your app
-3.  Define the routes described below
-4.  Define controller functions for each of your routes (remember to use `.populate` for `created_by` and `belongs_to` fields that are mongo ids! This will be extremely useful when you are working on the front-end!)
-5.  You will also need to return a `comment_count` property on all your endpoints that return articles. Attempt it on a single article first, then apply it to your all articles endpoint and finally your post new article. This is a great challenge to help consolidate your understanding of promises. (Note: do __not__ change the models to have a `comment_count` value in the database!)
-6.  Use proper project configuration from the offset, being sure to treat development and test differently.
-7.  Test each route as you go. Remember to test the happy and the unhappy paths! Make sure your error messages are helpful and your error status codes are chosen correctly. Remember to seed the test database using the seeding function and make the saved data available to use within your test suite.
+## **Welcome to Northcoders News!** 
 
 
-**HINT** Make sure to drop and reseed your test database with every test. This will make it much easier to keep track of your data throughout. In order for this to work, you are going to need to keep track of the MongoIDs your seeded docs have been given. In order to do this, you might want to consider what your seed file returns, and how you can use this in your tests.
+A RESTful API made using MongoDB, Mongoose, Node.js and Express.js. 
 
-### Routes
+Northcoders News is a news aggregator which has articles divided by topic; each article has comments which can be added to or deleted by the user who posts them and votes which can be incrememented or decremented.
 
-Your server should have the following end-points:
+The API has been deployed by Heroku and can be found at ?
 
-```http
-GET /api 
-# Serves an HTML page with documentation for all the available endpoints
+------------
+
+## **Getting Started**
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+### **Prerequisites**
+
+There are a few things you will need in order to install the API, these are listed below.
+
+### General:
+
+* A text editor e.g. VS Code, Sublime, Atom etc
+* A Linux terminal e.g. Terminator
+* npm package manager (comes with node.js) [Installation instructions](https://www.npmjs.com/)
+* MongoDB v4.0 for the database [Docs and information](https://www.mongodb.com/)
+* Postman for testing endpoints [Download information](https://www.getpostman.com/apps)
+* An mLab account to host the production database [Signup information](https://mlab.com/)
+* A Heroku account to deploy a live version of the API [Signup information](https://www.heroku.com/)
+
+### Dependencies you will need:
+
+* Mongoose v5.0.14 [Installation Instructions](https://www.npmjs.com/package/mongoose)
+* body-parser v1.15.2 [Installation Instructions](https://www.npmjs.com/package/body-parser)
+* Node.js v8.1.0 [Installation Instructions](https://nodejs.org/en/download/package-manager/)
+* Express.js v4.16.3 [Installation Instructions](https://www.npmjs.com/package/express)
+
+
+### Dev Dependencies you will need:
+
+* Mocha v5.0.5 [Installation Instructions](https://www.npmjs.com/package/mocha)
+* Chai v4.1.2 library [Installation Instructions](https://www.npmjs.com/package/chai)
+* Nodemon v1.17.4 [Installation Instructions](https://www.npmjs.com/package/nodemon)
+* Supertest v3.0.0 [Installation Instructions](https://www.npmjs.com/package/supertest)
+
+----------
+
+## **Installing**
+
+A step by step series of examples that tell you how to get a development env running
+
+### **Get this Repository**
+
+* Fork this repository and clone it so you have your own local copy
+
+* Run the git clone command in your terminal
+
+```
+$ git clone https://github.com/HorrorOfPartyBeach/BE2-northcoders-news
 ```
 
-```http
-GET /api/topics
-# Get all the topics
+* `cd` into the northcoders news folder and run `npm install`
+
+### **Install MongoDB**
+
+* Install MongoDB, if you don't already have it installed, by running the following codes:
+```
+$ sudo apt -y install mongodb
+```
+* Open a new terminal window and run the command `mongod`, it should say `waiting for connections on port 27017...` at the bottom. If you encounter any issues, it may be because MongoDB is already running in the background. You can try running the Mongo shell in a new terminal window to see if it will work. If it doesn't, you can try finding and killing the current process by following the steps below:
+
+* Find process by name:
+```
+$ pgrep mongo
+e.g. 1350
+```
+* Kill mongod-process
+```
+$ kill 1350
+```
+If you get the following error `/data/db not found/does not exist` or `read/write issues to /data/db` or similar, run the below commands -
+```
+$ mkdir -p /data/db
+$ sudo chown -R $USER /data/db
+```
+* You can run the Mongo shell separately in a new window by running `mongo` and leave the `mongod` window running in the background.
+
+### **Install required dependencies**
+
+* Open it in your text editor and check if you have node and npm installed by running the following codes in your terminal
+
+```
+$ node -v
+$ npm -v
 ```
 
-```http
-GET /api/topics/:topic_slug/articles
-# Return all the articles for a certain topic
-# e.g: `/api/topics/football/articles`
+* If Node is not installed, run the following codes (for Debian/Ubuntu)
+
+```
+$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
 ```
 
-```http
-POST /api/topics/:topic_slug/articles
-# Add a new article to a topic. This route requires a JSON body with title and body key value pairs
-# e.g: `{ "title": "new article", "body": "This is my new article content", "created_by": "user_id goes here"}`
+* Install the various dependencies you need as per their instructions
+
+```
+e.g npm i express
 ```
 
-```http
-GET /api/articles
-# Returns all the articles
+* Remember to install Supertest and Nodemon as Dev dependencies
+
+```
+e.g. npm i -D Supertest
 ```
 
-```http
-GET /api/articles/:article_id
-# Get an individual article
+* Make a config folder in the root folder and within that, a config.js file by running the commands below
+
+```
+$ mkdir config
+$ touch config.js
 ```
 
-```http
-GET /api/articles/:article_id/comments
-# Get all the comments for a individual article
+* In the root folder, make a .gitignore and list your config folder in it so it doesn't get pushed to github
+
+```
+$ touch .gitignore
 ```
 
-```http
-POST /api/articles/:article_id/comments
-# Add a new comment to an article. This route requires a JSON body with body and created_by key value pairs
-# e.g: `{"body": "This is my new comment", "created_by": "user_id goes here"}`
+* Use the below boilerplate config in your config.js
+
+```js
+const NODE_ENV = process.env.NODE_ENV || 'development'
+
+config = {
+  development: {
+    'mongodb://localhost:27017/your_database_name'
+  },
+  test: {
+    'mongodb://localhost:27017/your_test_database_name'
+    },
+  production: {
+    'mongodb://<dbuser>:<dbpassword>@ds161710.mlab.com:61710/example-db'
+  }
+};
+
+module.exports = config[NODE_ENV];
 ```
 
-```http
-PATCH /api/articles/:article_id
-# Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down'
-# e.g: `/api/articles/:article_id?vote=up`
+### **Include package.json Scripts**
+
+Insure the following scripts are in your package.json so you can run the various npm commands.
+
+```js
+"scripts": {
+    "test": "mocha ./spec",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed:dev": "node ./seed/seed.dev.js"
+  }
 ```
 
-```http
-PATCH /api/comments/:comment_id
-# Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down'
-# e.g: `/api/comments/:comment_id?vote=down`
+### **Seed the database**
+
+You can seed the database by running `npm run seed:dev` in your terminal.
+
+-----------------
+
+## **Endpoints and Examples**
+
+To test endpoints, follow the steps below: 
+
+* Ensure `mongod` is running in one terminal
+
+* Run `npm run dev` in another terminal, it should state:
+
+  ```
+  [nodemon] 1.17.4
+  [nodemon] to restart at any time, enter `rs`
+  [nodemon] watching: *.*
+  [nodemon] starting `node index.js`
+  listening on port 9090
+  mongodb://localhost:27017/ncnews_name
+  ```
+
+* Open the Postman app and make a request as per the documentation; the request url will be `localhost:9090/` followed by an appropriate endpoint path e.g. `localhost:9090/api/articles`.
+
+### The available endpoints are listed in the table below:
+
+Endpoint | Path
+------------ | -------------
+HTML page listing available endpoints | **GET /api**
+Get all the users | **GET /api/users**
+Get user by ID | **GET /api/users/:username** --- e.g: `/api/users/mitch123`
+Get all topics | **GET /api/topics**
+Get all articles for a single topic | **GET /api/topics/:topic_slug/articles** --- e.g: `/api/topics/football/articles`
+Add a new article to a topic | **POST /api/topics/:topic_slug/articles** --- e.g: `{ "title": "new article", "body": "This is my new article content", "created_by": "user_id goes here"}`
+Get all articles | **GET /api/articles**
+Get article by ID | **GET /api/articles/:article_id** --- e.g: `/api/articles/5b9ba40c8ed29146542ab7a4`
+Get all comments for a single article | **GET /api/articles/:article_id/comments** --- e.g: `/api/articles/5b9ba40c8ed29146542ab7a4/comments`
+Add a new comment to an article | **POST /api/articles/:article_id/comments** --- e.g: `{"body": "This is my new comment", "created_by": "user_id goes here"}`
+Change the article votes - requires a vote up/down query | **PATCH /api/articles/:article_id** --- e.g: `/api/articles/5b9ba40c8ed29146542ab7a4?vote=up`
+Change the comment votes - requires a vote up/down query | **PATCH /api/comments/:comment_id** --- e.g: `/api/comments/5b9ba40c8ed29146542ab7c8?vote=down`
+Delete a comment | **DELETE /api/comments/:comment_id**
+
+
+## **Running the tests**
+
+To run the tests, ensure you have run the `mongod` command in a separate terminal window and Mongo is connected on `port 27017`. Then run `npm run test` in a new window or the integrated terminal of your text editor.
+
+### **What the tests are for**
+
+The tests use Supertest, Mocha and the Chai library to test the happy and unhappy paths for the various available endpoints. Some examples can by found below:
+
+* *Test that the GET request returns an array of comments and a status 200 code*
+```js
+describe('/comments', () => {
+        it('GET returns an array of comments and 200 status code', () => {
+            return request.get('/api/comments')
+                .expect(200)
+                .then(res => {
+                    expect(res.body.comments).to.have.length(comments.length);
+                })
+        })
+    })
 ```
 
-```http
-DELETE /api/comments/:comment_id
-# Deletes a comment
+* *Test that a status 400 is returned if a required field is missing in a POST request*
+```js
+it('POST returns a 400 status and error message when a required field is missing', () => {
+            return request.post(`/api/topics/cats/articles`)
+                .send({
+                    "title": "New title",
+                    "body": "New article",
+                    "belongs_to": "cats"
+                })
+                .expect(400)
+                .then(res => {
+                    expect(res.body.msg).to.equal('articles validation failed: created_by: Path `created_by` is required.');
+                })
+        })
 ```
+----------------
 
-```http
-GET /api/users/:username
-# e.g: `/api/users/mitch123`
-# Returns a JSON object with the profile data for the specified user.
-```
+## **Deployment**
 
-NOTE: When it comes to building your front end you'll find it extremely useful if your POST comment endpoint returns the new comment with the created_by property populated with the corresponding user object.
+To deploy a live version, follow the instructions on mLabs for seeding the production database and the instructions on Heroku for deploying the API.
 
-### Step 3 - Hosting
+--------------------
 
-Once you are happy with your seed/dev file, prepare your project for production. You will need to seed the development data to mLab, and host the API on Heroku. If you've forgotten how to do this, you may want to look at this tutorial! https://www.sitepoint.com/deploy-rest-api-in-30-mins-mlab-heroku/
+## **Built With**
 
-### Step 4 - Preparing for your review and portfolio
+* [MongoDB](https://docs.mongodb.com/?_ga=2.256921288.21644899.1537894067-60737958.1536577057) - NoSQL database program
+* [Mongoose](https://mongoosejs.com/) - Object Data Modeling (ODM) library for MongoDB and Node.js
+* [Node.js](https://maven.apache.org/) - Javascript run-time environment
+* [Express.js](https://rometools.github.io/rome/) - Web Application framework
+* [mLab](https://mlab.com/) - Database-as-a-service
+* [Heroku](https://www.heroku.com/) - Cloud Application Platform
 
-Finally, you should write a README for this project (and remove this one). The README should be broken down like this: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+----------------
 
-It should also include the link where your herokuapp is hosted.
+## **Authors**
+
+**Emma Gilmour** - [HorrorOfPartyBeach](https://github.com/HorrorOfPartyBeach)
+
+---------------
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+--------------
+
+## **Acknowledgments**
+
+* The great tutors and course at Northcoders
+* A myriad of documentation
