@@ -31,7 +31,6 @@ const changeCommentVote = (req, res, next) => {
 // Delete comment
 const deleteComment = (req, res, next) => {
     const { comment_id } = req.params;
-    // console.log('hello')
     Comment.deleteOne({ _id: comment_id })
         .then(() => res.status(204).send())
         .catch(next);

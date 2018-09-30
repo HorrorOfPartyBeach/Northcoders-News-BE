@@ -11,11 +11,9 @@ const getUsers = (req, res, next) => {
 // GET users by username
 const getUsername = (req, res, next) => {
   const { username } = req.params;
-  // console.log(req.params.username)
   User.find({ username: username })
     .then(user => {
       if (!user.length) throw { msg: 'User not found', status: 404 }
-      //console.log(user)
       res.send({ user });
     })
     .catch(next)

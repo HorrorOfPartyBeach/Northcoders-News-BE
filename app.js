@@ -32,6 +32,7 @@ app.use('/*', (req, res) => {
   res.status(404).send('Page not found');
 })
 
+// 400, 404, 500
 app.use(handle400s);
 app.use(handle404s);
 app.use(handle500s);

@@ -24,12 +24,9 @@ describe('/api', function () {
 
     // Main page
     describe('/', () => {
-        it('GET returns a status 200 and a welcome message', () => {
+        it('GET returns a status 200 and an ejs page', () => {
             return request.get('/')
                 .expect(200)
-                .then(res => {
-                    expect(res.body).to.eql({ msg: 'Welcome to NC News!' })
-                })
         })
     })
 
@@ -52,15 +49,11 @@ describe('/api', function () {
             return request.get(`/api/users/${users[0].username}`)
                 .expect(200)
                 .then(res => {
-                    // console.log(users[0].username, '<<<<')
-                    // console.log(res.body.user[0].username)
                     expect(res.body.user[0].username).to.equal(users[0].username);
-                    // console.log(res.body.users.username)
-                    //console.log(users[0].username)
                 })
         })
+        // 404
         it('GET returns an error message and 404 status code when user not found', () => {
-            // console.log(users[2])
             return request.get(`/api/users/${users[2]}`)
                 .expect(404)
                 .then(res => {
@@ -89,7 +82,6 @@ describe('/api', function () {
             return request.patch(`/api/comments/${comments[0]._id}?vote=up`)
                 .expect(200)
                 .then(res => {
-                    // console.log(res.body)
                     expect(res.body._id).to.equal(`${comments[0]._id}`)
                     expect(res.body.votes).to.equal(comments[0].votes + 1)
                 });
@@ -99,7 +91,6 @@ describe('/api', function () {
             return request.patch(`/api/comments/${comments[1]._id}?vote=down`)
                 .expect(200)
                 .then(res => {
-                    // console.log(res.body)
                     expect(res.body._id).to.equal(`${comments[1]._id}`)
                     expect(res.body.votes).to.equal(comments[1].votes - 1)
                 });
@@ -131,7 +122,6 @@ describe('/api', function () {
             return request.get('/api/topics/cats/articles')
                 .expect(200)
                 .then(res => {
-                    // console.log(res.body)
                     expect(res.body.articles).to.be.an('array')
                     expect(res.body.articles[0].belongs_to).to.equal('cats')
                 })
@@ -147,14 +137,11 @@ describe('/api', function () {
                 })
                 .expect(201)
                 .then(({ body }) => {
-                    // console.log(res.body)
                     expect(body.body).to.equal("New article")
                     expect(body).to.include.keys("belongs_to", "created_by")
-                    // return request.get('/api/topics/cats/articles').then(res => {
-                    //     expect(res.body.articles.length).to.equal(3);
-                    // });
                 }).then()
         })
+        // 400 - missing field test
         it('POST returns a 400 status and error message when a required field is missing', () => {
             return request.post(`/api/topics/cats/articles`)
                 .send({
@@ -167,6 +154,7 @@ describe('/api', function () {
                     expect(res.body.msg).to.equal('articles validation failed: created_by: Path `created_by` is required.');
                 })
         })
+        // 400 - invalid value test
         it('POST returns a 400 status and error message when an invalid value is passed to a field', () => {
             return request.post(`/api/topics/cats/articles`)
                 .send({
@@ -210,13 +198,9 @@ describe('/api', function () {
                     expect(res.body.article.created_by).to.equal(`${users[0]._id}`)
                     expect(res.body.article.belongs_to).to.equal(`${topics[0].slug}`)
                     expect(res.body.article._id).to.equal(`${articles[0]._id}`)
-                    // console.log(res.body.article.title)
-                    // console.log(res.body.article.body)
-                    // console.log(res.body.article.votes)
-                    // console.log(res.body.article.created_by)
-                    // console.log(`${topics[0].slug}`)
                 })
         })
+        // 400 - invalid id test
         it('GET returns 400 status code when id is invalid', () => {
             return request
                 .get(`/api/articles/words`)
@@ -225,9 +209,9 @@ describe('/api', function () {
                     expect(msg).to.equal('Cast to ObjectId failed for value "words" at path "_id" for model "articles"')
                 })
         })
+        // 404 - id doesn't exist test
         it('GET returns 404 for valid id that does not exist', () => {
             return request
-                // console.log(`${articles[0].id}`)
                 .get(`/api/articles/5b9ba40c8ed29146542ab7a3`)
                 .expect(404)
                 .then(({ body: { msg } }) => {
@@ -243,7 +227,6 @@ describe('/api', function () {
             return request.patch(`/api/articles/${articles[0]._id}?vote=up`)
                 .expect(200)
                 .then(res => {
-                    // console.log(res.body)
                     expect(res.body._id).to.equal(`${articles[0]._id}`)
                     expect(res.body.votes).to.equal(articles[0].votes + 1)
                 });
@@ -253,7 +236,6 @@ describe('/api', function () {
             return request.patch(`/api/articles/${articles[1]._id}?vote=down`)
                 .expect(200)
                 .then(res => {
-                    console.log(res.body)
                     expect(res.body._id).to.equal(`${articles[1]._id}`)
                     expect(res.body.votes).to.equal(articles[1].votes - 1)
                 });
@@ -266,7 +248,6 @@ describe('/api', function () {
             return request.get(`/api/articles/${articles[0]._id}/comments`)
                 .expect(200)
                 .then(res => {
-                    // console.log(res.body.comments.length)
                     expect(res.body.comments.length).to.equal(2)
                 })
         })
@@ -280,13 +261,10 @@ describe('/api', function () {
                 })
                 .expect(201)
                 .then(res => {
-                    // console.log(res.body)
                     expect(res.body.body).to.equal("New comment")
-                    // return request.get('/api/articles/${articles[0]._id}/comments').then(res => {
-                    //     expect(res.body.comments.length).to.equal(3);
-                    // });
                 })
         })
+        // 400 - missing field test
         it('POST returns a 400 status and error message when a required field is missing', () => {
             return request.post(`/api/articles/${articles[0]._id}/comments`)
                 .send({
@@ -297,6 +275,7 @@ describe('/api', function () {
                     expect(res.body.msg).to.equal('comments validation failed: created_by: Path `created_by` is required.');
                 })
         })
+        // 400 - invalid value in field test
         it('POST returns a 400 status and error message when an invalid value is passed to a field', () => {
             return request.post(`/api/articles/${articles[0]._id}/comments`)
                 .send({

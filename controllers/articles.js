@@ -28,7 +28,6 @@ const getArticleById = (req, res, next) => {
         .then(article => {
             if (article === null) throw { msg: 'Article not found', status: 404 }
             if (!article) throw { msg: 'Article ID not valid', status: 400 }
-            // console.log(article)
             res.send({ article })
         })
         .catch(next)
@@ -65,7 +64,6 @@ const getCommentsForArticle = (req, res, next) => {
 
 // POST a new comment to an article
 const addComment = (req, res, next) => {
-    // console.log('hello')
     let newComment = new Comment({
         body: req.body.body,
         belongs_to: req.params.article_id,

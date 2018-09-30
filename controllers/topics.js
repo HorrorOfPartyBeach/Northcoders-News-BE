@@ -12,7 +12,6 @@ const getTopics = (req, res, next) => {
 // GET articles by Topic
 const getArticlesByTopic = (req, res, next) => {
   let searchTopic = req.params.topic_slug.toLowerCase();
-  // console.log(req.params)
   Topic.find({ slug: searchTopic })
     .then(() => {
       return Article.find({ belongs_to: searchTopic })
