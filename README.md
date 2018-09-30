@@ -7,7 +7,7 @@ A RESTful API made using MongoDB, Mongoose, Node.js and Express.js.
 
 Northcoders News is a news aggregator which has articles divided by topic; each article has comments which can be added to or deleted by the user who posts them and votes which can be incrememented or decremented.
 
-The API has been deployed by Heroku and can be found at ?
+The API has been deployed by Heroku and can be found at https://nc-news33.herokuapp.com/
 
 ------------
 
