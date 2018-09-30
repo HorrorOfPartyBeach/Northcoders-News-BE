@@ -1,5 +1,6 @@
-const { User, Article, Topic } = require('../models');
+const { Article, Topic } = require('../models');
 
+// GET all articles
 const getTopics = (req, res, next) => {
   Topic.find()
     .then(topics => {
@@ -8,6 +9,7 @@ const getTopics = (req, res, next) => {
     .catch(next)
 }
 
+// GET articles by Topic
 const getArticlesByTopic = (req, res, next) => {
   let searchTopic = req.params.topic_slug.toLowerCase();
   // console.log(req.params)
@@ -21,20 +23,19 @@ const getArticlesByTopic = (req, res, next) => {
     .catch(next)
 }
 
-// POST a new article - NOT WORKING
+// POST a new article
 const addNewArticle = (req, res, next) => {
-  Topic.findById(req.params.topic_id)
-  User.findOne(req.params.user.body)
-  const newArticle = new Article({
-    ...req.body,
-    belongs_to: req.params.topic_id,
-    created_by: req.params.user.body
+  let newArticle = new Article({
+    title: req.body.title,
+    body: req.body.body,
+    belongs_to: req.params.topic_slug,
+    created_by: req.body.created_by
   });
-  newArticle
-    .save()
+  return newArticle.save()
     .then(article => {
-      res.status(201).send({ article, msg: `New article added` });
+      res.status(201).send(article);
     })
+    .catch(next)
 }
 
 module.exports = { getTopics, getArticlesByTopic, addNewArticle };

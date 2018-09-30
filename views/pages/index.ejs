@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head -->
+
+<head>
+  <% include ../partials/head %>
+</head>
+
+<!-- Body -->
+
+<body>
+
+  <!--Navbar-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <h2>
+      <font color="red">NC News</font>
+    </h2>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="www.northcoders.com">Northcoders News API
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/HorrorOfPartyBeach/BE2-northcoders-news">Github Repo</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!--Bootstrap Jumbotron-->
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Welcome to Northcoders News!</h1>
+      <p class="lead">This is the backend API of the Northcoders News project. The possible endpoints are listed below.</p>
+    </div>
+  </div>
+
+  <!--Endpoints-->
+
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col-lg-6 text-center" style="color: firebrick; background-color:rgb(233, 229, 229)">
+        <h2>Endpoint</h2>
+      </div>
+      <div class="col-lg-6 text-center" style="color: firebrick; background-color:rgb(233, 229, 229)">
+        <h2>Path</h2>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">HTML page listing
+        available endpoints</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">GET /api</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Get all the users</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">GET /api/users</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Get user by ID</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">GET
+        /api/users/:username</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Get all topics</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">GET /api/topics</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Get all articles
+        for a single topic</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">GET
+        /api/topics/:topic_slug/articles</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Add a new article to a
+        topic</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">POST
+        /api/topics/:topic_slug/articles</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Get all articles</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">GET /api/articles</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Get article by ID</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">GET
+        /api/articles/:article_id</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Get all comments
+        for a single article</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">GET
+        /api/articles/:article_id/comments</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Add a new comment to
+        an article</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">POST
+        /api/articles/:article_id/comments</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Change the
+        article votes - requires a vote up/down query</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">PATCH
+        /api/articles/:article_id</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:linen">Change the comment
+        votes - requires a vote up/down query</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:linen">PATCH
+        /api/comments/:comment_id</div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-6 text-center" style="color: darkslategrey; background-color:ghostwhite">Delete a comment</div>
+      <div class="col col-lg-6 text-center" style="color: slategrey;background-color:ghostwhite">DELETE
+        /api/comments/:comment_id</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
+
+</body>
+
+</html>

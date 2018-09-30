@@ -1,63 +1,83 @@
-const { User, Article, Comment } = require('../models');
+const { Article, Comment } = require('../models');
 
 // GET all articles
 const getArticles = (req, res, next) => {
-  Article.find()
-    .then(articles => {
-      res.send({ articles })
-    })
-    .catch(next)
+    Article.find()
+        .then(articles => {
+            // const findCommentCount = articles.map(article => {
+            //     return Comment.count({ belongs_to: article._id })
+            // })
+            // Promise.all(findCommentCount(articles))
+            //     .then(commentCount => {
+            //         const countedArticles = articles.map((item, i) => {
+            //             item = item.toObject();
+            //             item.comment_count = commentCount[i];
+            //             return item;
+            //         })
+            //         res.status(200).send({ articles: countedArticles })
+            //     })
+            res.send({ articles })
+        })
+        .catch(next)
 }
 
 // GET articles by ID
 const getArticleById = (req, res, next) => {
-  const { article_id } = req.params;
-  Article.findById(article_id)
-    .then(article => {
-      if (!article) throw { msg: 'Not Found', status: 404 }
-      res.send({ article });
-    })
-    .catch(next)
+    const { article_id } = req.params;
+    Article.findById(article_id)
+        .then(article => {
+            if (article === null) throw { msg: 'Article not found', status: 404 }
+            if (!article) throw { msg: 'Article ID not valid', status: 400 }
+            // console.log(article)
+            res.send({ article })
+        })
+        .catch(next)
+}
+
+// PATCH article vote up or down
+const changeArticleVote = (req, res, next) => {
+    const { article_id } = req.params;
+    const vote = req.query.vote;
+    let value;
+    if (vote) {
+        if (vote === 'up') value = 1;
+        else if (vote === 'down') value = -1;
+        else value = 0;
+        Article.findByIdAndUpdate(
+            article_id,
+            { $inc: { votes: value } },
+            { new: true }
+        )
+            .populate('created_by', 'username')
+            .then(article => res.send(article))
+            .catch(next);
+    }
 }
 
 // GET all comments for an article
 const getCommentsForArticle = (req, res, next) => {
-  Comment.find({ belongs_to: req.params.article_id })
-    .then(comments => {
-      res.send({ comments });
-    })
-    .catch(next);
+    Comment.find({ belongs_to: req.params.article_id })
+        .then(comments => {
+            res.send({ comments });
+        })
+        .catch(next);
 }
 
-// POST a new comment to an article - NOT WORKING
+// POST a new comment to an article
 const addComment = (req, res, next) => {
-  let comment = new Comment({
-    body: req.body.comment,
-    belongs_to: req.params.id,
-    created_by: req.params.user_id
-  });
-  comment.save()
-    .then(() => {
-      return Comment.find();
-    })
-    .then(comments => {
-      res.status(201);
-      res.send(comments);
-    })
-    .catch(next)
+    // console.log('hello')
+    let newComment = new Comment({
+        body: req.body.body,
+        belongs_to: req.params.article_id,
+        // .populate('created_by')
+        // .lean()
+        created_by: req.body.created_by
+    });
+    return newComment.save()
+        .then(comment => {
+            res.status(201).send(comment);
+        })
+        .catch(next)
 }
 
-// User.findById(req.user.id)
-// console.log(req.article.id)
-// const newComment = {
-//   body: req.body.comment,
-
-// }
-// newComment.then((req.body.comment) => {
-// Article.findOne({ comment: { $elemMatch: { $eq: user_id } } })
-//   .populate('created_by', 'user')
-//   .then(comment => {
-//     res.send({ comment });
-// })
-
-module.exports = { getArticles, getArticleById, getCommentsForArticle, addComment };
+module.exports = { getArticles, getArticleById, changeArticleVote, getCommentsForArticle, addComment };

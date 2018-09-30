@@ -12,19 +12,22 @@ mongoose
   .then(() => console.log(`${DB_URL}`))
   .catch(console.log);
 
+// Use ejs
+app.set('view engine', 'ejs')
+
 // Body-Parser
-app.use(bodyParser.json());
+app.use(bodyParser.json(), express.static('public'));
 
 // GET /api - # Serves an HTML page with documentation for all the available endpoints
 app.get('/', (req, res, next) => {
-  res.send({ msg: 'Welcome to NC News!' });
+  res.render('pages/index');
 });
 
 // Use the API Router
 app.use('/api', apiRouter)
 
 // Error Handling
-// 404 block
+// General 404 block
 app.use('/*', (req, res) => {
   res.status(404).send('Page not found');
 })
