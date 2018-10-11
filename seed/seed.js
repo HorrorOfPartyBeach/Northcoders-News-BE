@@ -26,7 +26,6 @@ const seedDB = ({ userData, topicData, articleData, commentData }) => {
         Comment.insertMany(formatCommentData(commentData, userDocs, articleDocs))
       ])
     })
-    .catch(console.log)
 };
 
 module.exports = seedDB;

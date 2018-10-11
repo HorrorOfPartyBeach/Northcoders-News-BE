@@ -37,8 +37,10 @@ describe('/api', function () {
         it('GET returns an array of users and 200 status code', () => {
             return request.get('/api/users')
                 .expect(200)
-                .then(res => {
-                    expect(res.body.users).to.have.length(users.length);
+                .then(({ body }) => {
+                    expect(body.users).to.have.length(users.length);
+                    expect(body.users[0].username).to.equal('butter_bridge');
+                    expect(body.users[1].name).to.equal('mitch');
                 })
         })
     })
@@ -48,16 +50,16 @@ describe('/api', function () {
         it('GET returns a single user object by username and 200 status code', () => {
             return request.get(`/api/users/${users[0].username}`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body.user[0].username).to.equal(users[0].username);
+                .then(({body}) => {
+                    expect(body.user[0].username).to.equal('butter_bridge');
                 })
         })
         // 404
         it('GET returns an error message and 404 status code when user not found', () => {
-            return request.get(`/api/users/${users[2]}`)
+            return request.get(`/api/users/noname`)
                 .expect(404)
-                .then(res => {
-                    expect(res.body.msg).to.equal('User not found');
+                .then(({body}) => {
+                    expect(body.msg).to.equal('User not found');
                 })
         })
     })
@@ -69,8 +71,8 @@ describe('/api', function () {
         it('GET returns an array of comments and 200 status code', () => {
             return request.get('/api/comments')
                 .expect(200)
-                .then(res => {
-                    expect(res.body.comments).to.have.length(comments.length);
+                .then(({body}) => {
+                    expect(body.comments).to.have.length(comments.length);
                 })
         })
     })
@@ -81,18 +83,18 @@ describe('/api', function () {
         it('PATCH increments the vote and returns a 200 status code', () => {
             return request.patch(`/api/comments/${comments[0]._id}?vote=up`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body._id).to.equal(`${comments[0]._id}`)
-                    expect(res.body.votes).to.equal(comments[0].votes + 1)
+                .then(({body}) => {
+                    expect(body._id).to.equal(`${comments[0]._id}`)
+                    expect(body.votes).to.equal(comments[0].votes + 1)
                 });
         })
         // Decrease vote
         it('PATCH decrements the vote and returns a 200 status code', () => {
             return request.patch(`/api/comments/${comments[1]._id}?vote=down`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body._id).to.equal(`${comments[1]._id}`)
-                    expect(res.body.votes).to.equal(comments[1].votes - 1)
+                .then(({body}) => {
+                    expect(body._id).to.equal(`${comments[1]._id}`)
+                    expect(body.votes).to.equal(comments[1].votes - 1)
                 });
         })
 
@@ -110,8 +112,10 @@ describe('/api', function () {
         it('GET returns an array of topics and 200 status code', () => {
             return request.get('/api/topics')
                 .expect(200)
-                .then(res => {
-                    expect(res.body.topics).to.have.length(topics.length);
+                .then(({body}) => {
+                    expect(body.topics).to.have.length(topics.length);
+                    expect(body.topics[0].title).to.equal('Mitch');
+                    expect(body.topics[1].slug).to.equal('cats');
                 })
         })
     })
@@ -121,9 +125,9 @@ describe('/api', function () {
         it('GET returns all the articles related to a single topic and 200 status code', () => {
             return request.get('/api/topics/cats/articles')
                 .expect(200)
-                .then(res => {
-                    expect(res.body.articles).to.be.an('array')
-                    expect(res.body.articles[0].belongs_to).to.equal('cats')
+                .then(({body}) => {
+                    expect(body.articles).to.be.an('array')
+                    expect(body.articles[0].belongs_to).to.equal('cats')
                 })
         })
         // POST a new article to a topic
@@ -150,8 +154,8 @@ describe('/api', function () {
                     "belongs_to": "cats"
                 })
                 .expect(400)
-                .then(res => {
-                    expect(res.body.msg).to.equal('articles validation failed: created_by: Path `created_by` is required.');
+                .then(({body}) => {
+                    expect(body.msg).to.equal('articles validation failed: created_by: Path `created_by` is required.');
                 })
         })
         // 400 - invalid value test
@@ -164,8 +168,8 @@ describe('/api', function () {
                     "created_by": "words"
                 })
                 .expect(400)
-                .then(res => {
-                    expect(res.body.msg).to.equal('articles validation failed: created_by: Cast to ObjectID failed for value "words" at path "created_by"');
+                .then(({body}) => {
+                    expect(body.msg).to.equal('articles validation failed: created_by: Cast to ObjectID failed for value "words" at path "created_by"');
                 })
         })
     })
@@ -191,13 +195,13 @@ describe('/api', function () {
         it('GET returns the requested article and 200 status code', () => {
             return request.get(`/api/articles/${articles[0]._id}`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body.article.title).to.equal(articles[0].title)
-                    expect(res.body.article.body).to.equal(articles[0].body)
-                    expect(res.body.article.votes).to.equal(articles[0].votes)
-                    expect(res.body.article.created_by).to.equal(`${users[0]._id}`)
-                    expect(res.body.article.belongs_to).to.equal(`${topics[0].slug}`)
-                    expect(res.body.article._id).to.equal(`${articles[0]._id}`)
+                .then(({body}) => {
+                    expect(body.article.title).to.equal(articles[0].title)
+                    expect(body.article.body).to.equal(articles[0].body)
+                    expect(body.article.votes).to.equal(articles[0].votes)
+                    expect(body.article.created_by).to.equal(`${users[0]._id}`)
+                    expect(body.article.belongs_to).to.equal(`${topics[0].slug}`)
+                    expect(body.article._id).to.equal(`${articles[0]._id}`)
                 })
         })
         // 400 - invalid id test

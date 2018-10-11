@@ -1,7 +1,7 @@
 const seedDB = require('./seed');
 const mongoose = require('mongoose');
-const DB_URL = require('../config/config.js');
-const data = require('./devData');
+const {DB_URL} = require('../config/config.js');
+const data = require('./testData');
 
 mongoose.connect(DB_URL)
   .then(() => {
@@ -11,4 +11,5 @@ mongoose.connect(DB_URL)
   .then(() => {
     console.log('Database successfully seeded!')
     mongoose.disconnect();
-  });
+  })
+  .catch(console.log);

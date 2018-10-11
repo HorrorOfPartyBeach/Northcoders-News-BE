@@ -26,8 +26,6 @@ There are a few things you will need in order to install the API, these are list
 * npm package manager (comes with node.js) [Installation instructions](https://www.npmjs.com/)
 * MongoDB v4.0 for the database [Docs and information](https://www.mongodb.com/)
 * Postman for testing endpoints [Download information](https://www.getpostman.com/apps)
-* An mLab account to host the production database [Signup information](https://mlab.com/)
-* A Heroku account to deploy a live version of the API [Signup information](https://www.heroku.com/)
 
 ### Dependencies you will need:
 
@@ -54,64 +52,30 @@ A step by step series of examples that tell you how to get a development env run
 
 * Fork this repository and clone it so you have your own local copy
 
-* Run the git clone command in your terminal
+* cd into the folder you want to save the copy to e.g. `cd Documents/myprojects` and run the git clone command in your terminal
 
 ```
 $ git clone https://github.com/HorrorOfPartyBeach/BE2-northcoders-news
 ```
 
-* `cd` into the northcoders news folder and run `npm install`
+* Run `cd BE2-northcoders-news` and then `npm install`
 
 ### **Install MongoDB**
 
-* Install MongoDB, if you don't already have it installed, by running the following codes:
+* Install MongoDB, if you don't already have it installed, by running the following:
+
 ```
 $ sudo apt -y install mongodb
 ```
-* Open a new terminal window and run the command `mongod`, it should say `waiting for connections on port 27017...` at the bottom. If you encounter any issues, it may be because MongoDB is already running in the background. You can try running the Mongo shell in a new terminal window to see if it will work. If it doesn't, you can try finding and killing the current process by following the steps below:
 
-* Find process by name:
-```
-$ pgrep mongo
-e.g. 1350
-```
-* Kill mongod-process
-```
-$ kill 1350
-```
-If you get the following error `/data/db not found/does not exist` or `read/write issues to /data/db` or similar, run the below commands -
-```
-$ mkdir -p /data/db
-$ sudo chown -R $USER /data/db
-```
-* You can run the Mongo shell separately in a new window by running `mongo` and leave the `mongod` window running in the background.
+* Open a new terminal window and run the command `mongod`, it should say `waiting for connections on port 27017...` at the bottom - you can run leave the `mongod` window running in the background.
 
 ### **Install required dependencies**
 
-* Open it in your text editor and check if you have node and npm installed by running the following codes in your terminal
+* Open the folder in VS Code (or another editor) and install dependencies by running the following command:
 
 ```
-$ node -v
-$ npm -v
-```
-
-* If Node is not installed, run the following codes (for Debian/Ubuntu)
-
-```
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
-```
-
-* Install the various dependencies you need as per their instructions
-
-```
-e.g npm i express
-```
-
-* Remember to install Supertest and Nodemon as Dev dependencies
-
-```
-e.g. npm i -D Supertest
+$ npm install
 ```
 
 * Make a config folder in the root folder and within that, a config.js file by running the commands below
@@ -121,43 +85,21 @@ $ mkdir config
 $ touch config.js
 ```
 
-* In the root folder, make a .gitignore and list your config folder in it so it doesn't get pushed to github
-
-```
-$ touch .gitignore
-```
-
 * Use the below boilerplate config in your config.js
 
 ```js
 const NODE_ENV = process.env.NODE_ENV || 'development'
 
-config = {
+const config = {
   development: {
-    'mongodb://localhost:27017/your_database_name'
+    DB_URL: 'mongodb://localhost:27017/nc_news'
   },
   test: {
-    'mongodb://localhost:27017/your_test_database_name'
-    },
-  production: {
-    'mongodb://<dbuser>:<dbpassword>@ds161710.mlab.com:61710/example-db'
-  }
+    DB_URL: 'mongodb://localhost:27017/nc_news_test'
+    }
 };
 
 module.exports = config[NODE_ENV];
-```
-
-### **Include package.json Scripts**
-
-Insure the following scripts are in your package.json so you can run the various npm commands.
-
-```js
-"scripts": {
-    "test": "mocha ./spec",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "seed:dev": "node ./seed/seed.dev.js"
-  }
 ```
 
 ### **Seed the database**
@@ -168,7 +110,7 @@ You can seed the database by running `npm run seed:dev` in your terminal.
 
 ## **Endpoints and Examples**
 
-To test endpoints, follow the steps below: 
+To use endpoints, follow the steps below: 
 
 * Ensure `mongod` is running in one terminal
 
@@ -180,7 +122,7 @@ To test endpoints, follow the steps below:
   [nodemon] watching: *.*
   [nodemon] starting `node index.js`
   listening on port 9090
-  mongodb://localhost:27017/ncnews_name
+  mongodb://localhost:27017/nc_news
   ```
 
 * Open the Postman app and make a request as per the documentation; the request url will be `localhost:9090/` followed by an appropriate endpoint path e.g. `localhost:9090/api/articles`.
@@ -244,7 +186,7 @@ it('POST returns a 400 status and error message when a required field is missing
 
 ## **Deployment**
 
-To deploy a live version, follow the instructions on mLabs for seeding the production database and the instructions on Heroku for deploying the API.
+The API has been deployed by Heroku and can be found at https://nc-news33.herokuapp.com/
 
 --------------------
 
