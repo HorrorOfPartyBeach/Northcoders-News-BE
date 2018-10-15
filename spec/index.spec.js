@@ -230,29 +230,30 @@ describe('/api', function () {
         it('PATCH increments the vote and returns a 200 status code', () => {
             return request.patch(`/api/articles/${articles[0]._id}?vote=up`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body._id).to.equal(`${articles[0]._id}`)
-                    expect(res.body.votes).to.equal(articles[0].votes + 1)
+                .then(({body}) => {
+                    expect(body._id).to.equal(`${articles[0]._id}`)
+                    expect(body.votes).to.equal(articles[0].votes + 1)
                 });
         })
         // Decrease vote
         it('PATCH decrements the vote and returns a 200 status code', () => {
             return request.patch(`/api/articles/${articles[1]._id}?vote=down`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body._id).to.equal(`${articles[1]._id}`)
-                    expect(res.body.votes).to.equal(articles[1].votes - 1)
+                .then(({body}) => {
+                    expect(body._id).to.equal(`${articles[1]._id}`)
+                    expect(body.votes).to.equal(articles[1].votes - 1)
                 });
         })
     })
 
     // GET all comments for an article
     describe('/:article_id/comments', () => {
-        it('GET returns all the comments for an article and 200 status code', () => {
+        it.only('GET returns all the comments for an article and 200 status code', () => {
             return request.get(`/api/articles/${articles[0]._id}/comments`)
                 .expect(200)
-                .then(res => {
-                    expect(res.body.comments.length).to.equal(2)
+                .then(({body}) => {
+                    expect(body.comments.length).to.equal(2)
+                    expect(body.comments[0].body).to.equal("Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — on you it works.")
                 })
         })
 
@@ -264,8 +265,8 @@ describe('/api', function () {
                     "created_by": users[0]._id
                 })
                 .expect(201)
-                .then(res => {
-                    expect(res.body.body).to.equal("New comment")
+                .then(({body}) => {
+                    expect(body.body).to.equal("New comment")
                 })
         })
         // 400 - missing field test
@@ -275,8 +276,8 @@ describe('/api', function () {
                     "body": "New comment"
                 })
                 .expect(400)
-                .then(res => {
-                    expect(res.body.msg).to.equal('comments validation failed: created_by: Path `created_by` is required.');
+                .then(({ body: { msg } }) => {
+                    expect(msg).to.equal('comments validation failed: created_by: Path `created_by` is required.');
                 })
         })
         // 400 - invalid value in field test
@@ -287,8 +288,8 @@ describe('/api', function () {
                     "created_by": "String"
                 })
                 .expect(400)
-                .then(res => {
-                    expect(res.body.msg).to.equal('comments validation failed: created_by: Cast to ObjectID failed for value "String" at path "created_by"');
+                .then(({ body: { msg } }) => {
+                    expect(msg).to.equal('comments validation failed: created_by: Cast to ObjectID failed for value "String" at path "created_by"');
                 })
         })
     })

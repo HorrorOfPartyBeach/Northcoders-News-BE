@@ -15,6 +15,8 @@ const getArticlesByTopic = (req, res, next) => {
   Topic.find({ slug: searchTopic })
     .then(() => {
       return Article.find({ belongs_to: searchTopic })
+      .populate('created_by', ['name', 'username', 'avatar_url'])
+      .lean()
         .then(articles => {
           res.status(200).send({ articles });
         })

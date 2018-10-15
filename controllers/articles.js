@@ -1,30 +1,24 @@
 const { Article, Comment } = require('../models');
+const { getCommentCount } = require('./comments');
 
 // GET all articles
 const getArticles = (req, res, next) => {
-    Article.find()
-        .then(articles => {
-            // const findCommentCount = articles.map(article => {
-            //     return Comment.count({ belongs_to: article._id })
-            // })
-            // Promise.all(findCommentCount(articles))
-            //     .then(commentCount => {
-            //         const countedArticles = articles.map((item, i) => {
-            //             item = item.toObject();
-            //             item.comment_count = commentCount[i];
-            //             return item;
-            //         })
-            //         res.status(200).send({ articles: countedArticles })
-            //     })
-            res.send({ articles })
-        })
-        .catch(next)
+    Article.find({}, '-__v')
+    .populate('created_by', ['name', 'username', 'avatar_url'])
+   .lean()
+    .then(articles => {Promise.all(articles.map(article => getCommentCount(article, Comment)))
+    .then(articles => res.send({articles}))
+    })
+    .catch(next)
 }
 
 // GET articles by ID
 const getArticleById = (req, res, next) => {
     const { article_id } = req.params;
     Article.findById(article_id)
+    .populate('created_by', ['name', 'username', 'avatar_url'])
+      .lean()
+      .then(article => (getCommentCount(article, Comment)))
         .then(article => {
             if (article === null) throw { msg: 'Article not found', status: 404 }
             if (!article) throw { msg: 'Article ID not valid', status: 400 }
