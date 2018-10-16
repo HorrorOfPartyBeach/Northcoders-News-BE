@@ -5,6 +5,7 @@ const { DB_URL } = process.env.NODE_ENV === 'production' ? process.env : require
 const bodyParser = require('body-parser');
 const { handle404s, handle400s, handle500s } = require('./errors');
 const app = express();
+const cors = require('cors')
 
 // Connect to database
 mongoose
@@ -17,6 +18,9 @@ app.set('view engine', 'ejs')
 
 // Body-Parser
 app.use(bodyParser.json(), express.static('public'));
+
+// CORS
+app.use(cors());
 
 // GET /api - # Serves an HTML page with documentation for all the available endpoints
 app.get('/', (req, res, next) => {
