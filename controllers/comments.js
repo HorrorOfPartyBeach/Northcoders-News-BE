@@ -4,7 +4,7 @@ const { Comment } = require('../models');
 const getComments = (req, res, next) => {
     Comment.find()
         .then(comments => {
-            res.send({ comments })
+            res.status(200).send({ comments })
         })
         .catch(next)
 }

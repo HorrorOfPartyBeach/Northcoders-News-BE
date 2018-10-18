@@ -3,9 +3,9 @@ const { getCommentCount } = require('./comments');
 
 // GET all articles
 const getArticles = (req, res, next) => {
-    Article.find({}, '-__v')
-    .populate('created_by', ['name', 'username', 'avatar_url'])
-   .lean()
+    Article.find()
+    .populate('created_by')
+    .lean()
     .then(articles => {Promise.all(articles.map(article => getCommentCount(article, Comment)))
     .then(articles => res.send({articles}))
     })
@@ -16,7 +16,7 @@ const getArticles = (req, res, next) => {
 const getArticleById = (req, res, next) => {
     const { article_id } = req.params;
     Article.findById(article_id)
-    .populate('created_by', ['name', 'username', 'avatar_url'])
+    .populate('created_by')
       .lean()
       .then(article => (getCommentCount(article, Comment)))
         .then(article => {
@@ -50,6 +50,8 @@ const changeArticleVote = (req, res, next) => {
 // GET all comments for an article
 const getCommentsForArticle = (req, res, next) => {
     Comment.find({ belongs_to: req.params.article_id })
+    .populate('created_by')
+    .lean()
         .then(comments => {
             res.send({ comments });
         })
