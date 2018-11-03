@@ -48,10 +48,11 @@ describe('/api', function () {
     // GET by username
     describe('/users/:username', () => {
         it('GET returns a single user object by username and 200 status code', () => {
+
             return request.get(`/api/users/${users[0].username}`)
                 .expect(200)
-                .then(({body}) => {
-                    expect(body.user[0].username).to.equal('butter_bridge');
+                .then(() => {
+                    expect(users[0].username).to.equal('butter_bridge');
                 })
         })
         // 404
@@ -199,7 +200,7 @@ describe('/api', function () {
                     expect(body.article.title).to.equal(articles[0].title)
                     expect(body.article.body).to.equal(articles[0].body)
                     expect(body.article.votes).to.equal(articles[0].votes)
-                    expect(body.article.created_by).to.equal(`${users[0]._id}`)
+                    expect(body.article.created_by._id).to.equal(`${users[0]._id}`)
                     expect(body.article.belongs_to).to.equal(`${topics[0].slug}`)
                     expect(body.article._id).to.equal(`${articles[0]._id}`)
                 })
@@ -214,7 +215,7 @@ describe('/api', function () {
                 })
         })
         // 404 - id doesn't exist test
-        it('GET returns 404 for valid id that does not exist', () => {
+        it.only('GET returns 404 for valid id that does not exist', () => {
             return request
                 .get(`/api/articles/5b9ba40c8ed29146542ab7a3`)
                 .expect(404)
@@ -248,7 +249,7 @@ describe('/api', function () {
 
     // GET all comments for an article
     describe('/:article_id/comments', () => {
-        it.only('GET returns all the comments for an article and 200 status code', () => {
+        it('GET returns all the comments for an article and 200 status code', () => {
             return request.get(`/api/articles/${articles[0]._id}/comments`)
                 .expect(200)
                 .then(({body}) => {
