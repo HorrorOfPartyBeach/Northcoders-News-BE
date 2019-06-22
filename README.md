@@ -2,6 +2,8 @@
 
 ## **Welcome to Northcoders News!** 
 
+### **Please note this was part of a coding bootcamp, I have not worked on the code since Oct 2018 and will instead leave it as it was when I was learning so that I can show progression in how far I have come since starting to code**
+
 
 A RESTful API made using MongoDB, Mongoose, Node.js and Express.js. 
 
